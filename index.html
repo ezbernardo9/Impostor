@@ -232,29 +232,24 @@ Mateo"></textarea>
         return;
       }
 
-      // Preparar nombres y pool
+      // Preparar nombres y elegir un ÚNICO futbolista para todos los NO impostores
       const nombres = getNombres(total);
-      let pool = parsePool();
-      const necesarios = total - impostores;
-      if(pool.length < necesarios){
-        // duplicamos aleatoriamente la lista para asegurar disponibilidad
-        const base = [...pool];
-        while(pool.length < necesarios){ pool = pool.concat(shuffle([...base])); }
-      }
+      const pool = parsePool();
+      const elegido = pool[Math.floor(Math.random() * pool.length)] || 'Jugador sorpresa';
 
-      // Asignaciones: crear array de roles
+      // Crear array de roles
       const roles = Array.from({length: total}, (_,i)=> ({
         nombre: nombres[i],
         rol: 'IMPOSTOR',
         detalle: 'Sabotea sin ser descubierto'
       }));
 
-      // Marcamos a los NO impostores y les damos un futbolista
+      // Marcar a los NO impostores y asignarles el MISMO futbolista
       const indices = shuffle([...Array(total).keys()]);
-      const noImp = indices.slice(0, necesarios);
-      noImp.forEach((idx, k)=>{
+      const noImp = indices.slice(0, total - impostores);
+      noImp.forEach((idx)=>{
         roles[idx].rol = 'FUTBOLISTA';
-        roles[idx].detalle = pool[k]; // asignación única
+        roles[idx].detalle = elegido;
       });
 
       renderTarjetas(roles);
@@ -262,9 +257,9 @@ Mateo"></textarea>
       // Totales
       el('#tTotal').textContent = String(total);
       el('#tImp').textContent = String(impostores);
-      el('#tJug').textContent = String(necesarios);
+      el('#tJug').textContent = String(total - impostores);
       el('#totals').hidden = false;
-      showMsg('¡Roles repartidos! Cada jugador toca su tarjeta para ver su identidad.');
+      showMsg('¡Roles repartidos! Todos los que no son impostores comparten el mismo futbolista.');
     }
 
     function renderTarjetas(roles){
@@ -314,7 +309,6 @@ Mateo"></textarea>
     function ocultarTodos(){
       document.querySelectorAll('.flip').forEach(f=>{ f.classList.remove('is-revealed'); f.setAttribute('aria-pressed','false'); });
     }
-    function ocultarTodos(){ document.querySelectorAll('.mask').forEach(m=> m.hidden = false); }
     function mezclar(){
       const cards = Array.from(document.querySelectorAll('#cards .card'));
       const parent = el('#cards');
@@ -343,3 +337,4 @@ Mateo"></textarea>
   </script>
 </body>
 </html>
+
