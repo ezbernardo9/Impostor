@@ -5,212 +5,690 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Impostor de Fútbol</title>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap');
+    
     :root{
-      --bg:#0b1220;       /* azul noche */
-      --card:#0f1730;     /* azul profundo */
-      --accent:#00e887;   /* verde césped */
-      --accent-2:#00b4d8; /* celeste pelota */
-      --line:#1f2a4a;
-      --text:#e8efff;
-      --muted:#9fb2d9;
-      --danger:#ff4d4d;
-      --radius:16px;
-      --container:1100px;
-      --shadow:0 10px 30px rgba(0,0,0,.35);
+      --beige:#d4b896;
+      --beige-dark:#b89968;
+      --red:#e63946;
+      --red-dark:#c1303d;
+      --grey:#5a5a5a;
+      --grey-light:#8a8a8a;
+      --grey-dark:#2a2a2a;
+      --black:#1a1a1a;
+      --white:#f8f8f8;
+      --cream:#f5ede4;
     }
-    *{box-sizing:border-box}
-    html,body{margin:0;padding:0;background:radial-gradient(1000px 600px at 120% -10%, #13315a 0%, #0b1220 45%, #0b1220 100%);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",Roboto,Inter,Arial,sans-serif;}
-    .wrap{width:min(100% - 2rem,var(--container));margin-inline:auto;padding:1.25rem 0 2rem;}
-    header{
-      display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-bottom:1rem;
-    }
-    .brand{display:flex;align-items:center;gap:.75rem}
-    .logo{
-      width:44px;height:44px;border-radius:50%;
-      background:conic-gradient(from 180deg,var(--accent),var(--accent-2));
-      box-shadow:inset 0 0 0 3px #0b1220, 0 0 0 3px var(--line), var(--shadow);
+    
+    *{box-sizing:border-box;margin:0;padding:0}
+    
+    body{
+      background:linear-gradient(135deg, var(--beige) 0%, var(--cream) 100%);
+      color:var(--black);
+      font-family:'Inter',system-ui,sans-serif;
+      min-height:100vh;
       position:relative;
     }
-    .logo:after{content:"⚽";position:absolute;inset:0;display:grid;place-items:center;font-size:22px;filter:drop-shadow(0 2px 2px rgba(0,0,0,.35))}
-    h1{font-size:clamp(1.25rem, 1rem + 2vw, 2rem);margin:0}
-    p{margin:.25rem 0 .75rem;color:var(--muted)}
-
+    
+    /* Textura de papel */
+    body:before{
+      content:'';
+      position:fixed;
+      inset:0;
+      background-image:
+        repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,.02) 2px, rgba(0,0,0,.02) 4px),
+        repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(0,0,0,.02) 2px, rgba(0,0,0,.02) 4px);
+      pointer-events:none;
+      opacity:.5;
+    }
+    
+    /* Pattern de balones */
+    body:after{
+      content:'';
+      position:fixed;
+      inset:0;
+      background-image:radial-gradient(circle, rgba(0,0,0,.03) 1px, transparent 1px);
+      background-size:30px 30px;
+      pointer-events:none;
+      opacity:.4;
+    }
+    
+    .container{
+      max-width:1400px;
+      margin:0 auto;
+      padding:2rem 1rem;
+      position:relative;
+      z-index:1;
+    }
+    
+    /* Header con el logo impostor */
+    header{
+      text-align:center;
+      margin-bottom:3rem;
+      position:relative;
+    }
+    
+    .logo-container{
+      width:180px;
+      height:180px;
+      margin:0 auto 1.5rem;
+      position:relative;
+      animation:float 4s ease-in-out infinite;
+    }
+    
+    .logo-container img{
+      width:100%;
+      height:100%;
+      object-fit:contain;
+      filter:drop-shadow(0 10px 30px rgba(0,0,0,.25));
+    }
+    
+    @keyframes float{
+      0%, 100%{transform:translateY(0) rotate(-2deg)}
+      50%{transform:translateY(-15px) rotate(2deg)}
+    }
+    
+    h1{
+      font-size:clamp(2.5rem, 6vw, 4.5rem);
+      font-weight:900;
+      letter-spacing:-3px;
+      color:var(--red);
+      text-transform:uppercase;
+      margin-bottom:.5rem;
+      text-shadow:4px 4px 0 var(--black);
+      position:relative;
+    }
+    
+    .subtitle{
+      font-size:1.2rem;
+      color:var(--grey);
+      max-width:600px;
+      margin:0 auto;
+      font-weight:600;
+    }
+    
+    /* Layout */
+    .main-grid{
+      display:grid;
+      gap:2rem;
+      grid-template-columns:1fr;
+    }
+    
+    @media(min-width:1024px){
+      .main-grid{grid-template-columns:420px 1fr}
+    }
+    
+    /* Panel estilo vintage */
     .panel{
-      background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.02));
-      border:1px solid var(--line);border-radius:var(--radius);padding:1rem;box-shadow:var(--shadow);
+      background:var(--white);
+      border:4px solid var(--black);
+      border-radius:20px;
+      padding:2rem;
+      box-shadow:8px 8px 0 var(--black);
+      position:relative;
     }
-
-    .grid{display:grid;gap:1rem}
-    @media(min-width:900px){ .grid{grid-template-columns:420px 1fr;} }
-
+    
+    .panel:before{
+      content:'';
+      position:absolute;
+      top:-2px;
+      left:-2px;
+      right:-2px;
+      height:8px;
+      background:var(--red);
+      border-radius:16px 16px 0 0;
+    }
+    
+    .panel-title{
+      font-size:1.5rem;
+      font-weight:900;
+      margin-bottom:1.5rem;
+      color:var(--black);
+      text-transform:uppercase;
+      letter-spacing:1px;
+      position:relative;
+      padding-left:1.5rem;
+    }
+    
+    .panel-title:before{
+      content:'';
+      position:absolute;
+      left:0;
+      top:50%;
+      transform:translateY(-50%);
+      width:6px;
+      height:100%;
+      background:var(--red);
+      border-radius:3px;
+    }
+    
     /* Formulario */
-    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
-    .form-row + .form-row{margin-top:.75rem}
-    label{font-size:.9rem;color:var(--muted)}
-    input[type="number"], textarea, input[type="text"]{
-      width:100%;padding:.7rem .8rem;border-radius:12px;border:1px solid var(--line);
-      background:#0e1530;color:var(--text);outline:none;
+    .form-group{
+      margin-bottom:1.5rem;
     }
-    textarea{min-height:120px;resize:vertical}
-    .hint{font-size:.8rem;color:var(--muted)}
-
-    .btns{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.9rem}
+    
+    .form-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:1rem;
+    }
+    
+    label{
+      display:block;
+      font-size:.85rem;
+      font-weight:700;
+      text-transform:uppercase;
+      letter-spacing:.5px;
+      color:var(--grey);
+      margin-bottom:.5rem;
+    }
+    
+    input, textarea{
+      width:100%;
+      background:var(--cream);
+      border:3px solid var(--grey-dark);
+      border-radius:10px;
+      padding:1rem;
+      color:var(--black);
+      font-family:inherit;
+      font-size:1rem;
+      font-weight:600;
+      transition:all .2s;
+      outline:none;
+    }
+    
+    input:focus, textarea:focus{
+      border-color:var(--red);
+      box-shadow:0 0 0 4px rgba(230,57,70,.2);
+      transform:translateY(-2px);
+    }
+    
+    textarea{
+      min-height:120px;
+      resize:vertical;
+    }
+    
+    .hint{
+      font-size:.8rem;
+      color:var(--grey-light);
+      margin-top:.5rem;
+      font-weight:500;
+    }
+    
+    /* Botones estilo retro */
+    .btn-group{
+      display:flex;
+      flex-wrap:wrap;
+      gap:.75rem;
+      margin-top:2rem;
+    }
+    
     button{
-      appearance:none;border:none;border-radius:999px;padding:.7rem 1rem;font-weight:600;letter-spacing:.2px;cursor:pointer
+      padding:1rem 1.5rem;
+      border:none;
+      border-radius:10px;
+      font-weight:800;
+      font-size:.9rem;
+      cursor:pointer;
+      transition:all .2s;
+      text-transform:uppercase;
+      letter-spacing:.5px;
+      border:3px solid var(--black);
+      position:relative;
     }
-    .primary{background:linear-gradient(90deg,var(--accent) 0%, var(--accent-2) 100%);color:#05111a}
-    .ghost{background:transparent;border:1px solid var(--line);color:var(--text)}
-    .danger{background:var(--danger);color:white}
-
-    /* Tarjetas */
-    .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem}
-    .card{perspective:1000px}
-    .flip{position:relative;min-height:160px;border-radius:18px;border:1px solid var(--line);background:linear-gradient(180deg,#0f1b3f 0%, #0d1634 100%);box-shadow:var(--shadow);transform-style:preserve-3d;transition:transform .6s;}
-    .flip.is-revealed{transform:rotateY(180deg)}
-    .face{position:absolute;inset:0;padding:1rem;border-radius:18px;backface-visibility:hidden;display:flex;flex-direction:column;justify-content:flex-start}
-    .front{background:linear-gradient(180deg,#0f1b3f 0%, #0d1634 100%)}
-    .back{transform:rotateY(180deg);}
-
-    .face h3{margin:.25rem 0 .35rem;font-size:1.05rem}
-    .badge{display:inline-flex;align-items:center;gap:.35rem;border-radius:999px;padding:.25rem .6rem;font-size:.75rem;border:1px solid var(--line);color:var(--muted)}
-    .role{margin-top:.6rem;font-size:1.05rem}
-
-    /* Estados visuales del dorso */
-    .back.fut{background:linear-gradient(180deg,rgba(0,232,135,.15) 0%, rgba(0,232,135,.07) 100%);border:1px solid rgba(0,232,135,.35)}
-    .back.imp{background:linear-gradient(180deg,rgba(255,77,77,.18) 0%, rgba(255,77,77,.08) 100%);border:1px solid rgba(255,77,77,.45)}
-    .role .imp-text{color:var(--danger);font-weight:800}
-    .role .fut-text{color:var(--accent);font-weight:700}
-
-    .reveal-hint{margin-top:auto;color:var(--muted);font-size:.85rem;opacity:.85}
-
-    .toolbar{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;margin-bottom:.75rem}
-    .sep{flex:1;border-top:1px dashed var(--line);opacity:.6}
-
-    .totals{display:flex;gap:1rem;flex-wrap:wrap;color:var(--muted);font-size:.9rem}
-    .totals strong{color:var(--text)}
-
-    .error{border:1px solid #ff7878;background:#2a0f15;color:#ffd2d2;padding:.6rem .8rem;border-radius:10px;margin:.75rem 0}
-    .success{border:1px solid rgba(0,232,135,.35);background:#0b1f1a;color:#baf5dc;padding:.6rem .8rem;border-radius:10px;margin:.75rem 0}
-
-    footer{margin-top:1.25rem;color:var(--muted);font-size:.85rem;display:flex;gap:.5rem;flex-wrap:wrap;align-items:center}
-    footer a{color:var(--accent)}
+    
+    button:hover{
+      transform:translate(-4px, -4px);
+    }
+    
+    button:active{
+      transform:translate(0, 0);
+    }
+    
+    .btn-primary{
+      background:var(--red);
+      color:var(--white);
+      box-shadow:4px 4px 0 var(--black);
+    }
+    
+    .btn-primary:hover{
+      box-shadow:8px 8px 0 var(--black);
+    }
+    
+    .btn-primary:active{
+      box-shadow:2px 2px 0 var(--black);
+    }
+    
+    .btn-secondary{
+      background:var(--beige);
+      color:var(--black);
+      box-shadow:4px 4px 0 var(--grey-dark);
+    }
+    
+    .btn-secondary:hover{
+      box-shadow:8px 8px 0 var(--grey-dark);
+    }
+    
+    .btn-secondary:active{
+      box-shadow:2px 2px 0 var(--grey-dark);
+    }
+    
+    .btn-danger{
+      background:var(--grey-dark);
+      color:var(--white);
+      box-shadow:4px 4px 0 var(--black);
+    }
+    
+    .btn-danger:hover{
+      box-shadow:8px 8px 0 var(--black);
+    }
+    
+    .btn-danger:active{
+      box-shadow:2px 2px 0 var(--black);
+    }
+    
+    /* Stats retro */
+    .stats{
+      display:grid;
+      grid-template-columns:repeat(3, 1fr);
+      gap:1rem;
+      margin-top:1.5rem;
+    }
+    
+    .stat-card{
+      background:var(--cream);
+      border:3px solid var(--black);
+      border-radius:12px;
+      padding:1rem;
+      text-align:center;
+      box-shadow:4px 4px 0 var(--grey-dark);
+    }
+    
+    .stat-label{
+      font-size:.7rem;
+      text-transform:uppercase;
+      letter-spacing:1px;
+      color:var(--grey);
+      margin-bottom:.5rem;
+      font-weight:700;
+    }
+    
+    .stat-value{
+      font-size:2.5rem;
+      font-weight:900;
+      color:var(--red);
+      text-shadow:2px 2px 0 var(--beige-dark);
+    }
+    
+    /* Tarjetas estilo Among Us/Impostor */
+    .cards-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fill, minmax(220px, 1fr));
+      gap:1.5rem;
+      min-height:300px;
+    }
+    
+    .card-wrapper{
+      perspective:1500px;
+      animation:cardDrop .6s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
+    }
+    
+    @keyframes cardDrop{
+      from{
+        opacity:0;
+        transform:translateY(-100px) rotateX(-90deg);
+      }
+      to{
+        opacity:1;
+        transform:translateY(0) rotateX(0);
+      }
+    }
+    
+    .card-wrapper:nth-child(1){animation-delay:.1s}
+    .card-wrapper:nth-child(2){animation-delay:.15s}
+    .card-wrapper:nth-child(3){animation-delay:.2s}
+    .card-wrapper:nth-child(4){animation-delay:.25s}
+    .card-wrapper:nth-child(5){animation-delay:.3s}
+    .card-wrapper:nth-child(6){animation-delay:.35s}
+    .card-wrapper:nth-child(7){animation-delay:.4s}
+    .card-wrapper:nth-child(8){animation-delay:.45s}
+    .card-wrapper:nth-child(n+9){animation-delay:.5s}
+    
+    .card{
+      position:relative;
+      width:100%;
+      height:260px;
+      transform-style:preserve-3d;
+      transition:transform .7s cubic-bezier(0.4, 0.2, 0.2, 1);
+      cursor:pointer;
+    }
+    
+    .card:hover{
+      transform:translateY(-8px);
+    }
+    
+    .card.flipped{
+      transform:rotateY(180deg);
+    }
+    
+    .card.flipped:hover{
+      transform:rotateY(180deg) translateY(-8px);
+    }
+    
+    .card-face{
+      position:absolute;
+      inset:0;
+      backface-visibility:hidden;
+      border-radius:16px;
+      padding:1.5rem;
+      display:flex;
+      flex-direction:column;
+      border:4px solid var(--black);
+    }
+    
+    .card-front{
+      background:var(--white);
+      box-shadow:6px 6px 0 var(--black);
+    }
+    
+    .card-back{
+      transform:rotateY(180deg);
+      box-shadow:6px 6px 0 var(--black);
+    }
+    
+    .card-back.player{
+      background:linear-gradient(135deg, var(--beige) 0%, var(--beige-dark) 100%);
+      border-color:var(--grey-dark);
+    }
+    
+    .card-back.impostor{
+      background:linear-gradient(135deg, var(--red) 0%, var(--red-dark) 100%);
+      border-color:var(--black);
+    }
+    
+    .card-number{
+      font-size:.75rem;
+      font-weight:900;
+      color:var(--grey);
+      text-transform:uppercase;
+      letter-spacing:2px;
+      margin-bottom:1rem;
+      padding:.25rem .75rem;
+      background:var(--cream);
+      border-radius:20px;
+      align-self:flex-start;
+      border:2px solid var(--black);
+    }
+    
+    .card-back .card-number{
+      background:rgba(255,255,255,.3);
+      color:var(--black);
+    }
+    
+    .card-name{
+      font-size:1.4rem;
+      font-weight:900;
+      margin-bottom:auto;
+      color:var(--black);
+      text-shadow:2px 2px 0 rgba(255,255,255,.3);
+    }
+    
+    .card-back.impostor .card-name{
+      color:var(--white);
+      text-shadow:2px 2px 0 rgba(0,0,0,.3);
+    }
+    
+    .card-role{
+      font-size:.9rem;
+      text-transform:uppercase;
+      letter-spacing:1px;
+      font-weight:900;
+      margin-bottom:.5rem;
+      padding:.5rem;
+      border-radius:8px;
+      text-align:center;
+    }
+    
+    .card-role.player{
+      background:var(--grey-dark);
+      color:var(--white);
+    }
+    
+    .card-role.impostor{
+      background:var(--black);
+      color:var(--white);
+    }
+    
+    .card-detail{
+      font-size:1.1rem;
+      font-weight:700;
+      text-align:center;
+      padding:.75rem;
+      background:rgba(255,255,255,.2);
+      border-radius:8px;
+      border:2px solid rgba(0,0,0,.2);
+    }
+    
+    .card-back.impostor .card-detail{
+      color:var(--white);
+      border-color:rgba(255,255,255,.3);
+    }
+    
+    .card-hint{
+      font-size:.75rem;
+      color:var(--grey);
+      text-align:center;
+      margin-top:1rem;
+      font-weight:600;
+    }
+    
+    .card-back .card-hint{
+      color:rgba(0,0,0,.6);
+    }
+    
+    .card-back.impostor .card-hint{
+      color:rgba(255,255,255,.7);
+    }
+    
+    /* Alertas retro */
+    .alert{
+      padding:1rem 1.5rem;
+      border-radius:12px;
+      margin-bottom:1.5rem;
+      font-weight:700;
+      animation:slideDown .3s ease-out;
+      border:3px solid var(--black);
+    }
+    
+    @keyframes slideDown{
+      from{
+        opacity:0;
+        transform:translateY(-20px);
+      }
+    }
+    
+    .alert-success{
+      background:var(--beige);
+      color:var(--black);
+      box-shadow:4px 4px 0 var(--grey-dark);
+    }
+    
+    .alert-error{
+      background:var(--red);
+      color:var(--white);
+      box-shadow:4px 4px 0 var(--black);
+    }
+    
+    /* Toolbar */
+    .toolbar{
+      display:flex;
+      align-items:center;
+      gap:1rem;
+      margin-bottom:2rem;
+      padding-bottom:1rem;
+      border-bottom:3px dashed var(--grey-dark);
+      flex-wrap:wrap;
+    }
+    
+    .toolbar-badge{
+      background:var(--cream);
+      padding:.75rem 1.25rem;
+      border-radius:20px;
+      font-size:.85rem;
+      font-weight:700;
+      border:3px solid var(--black);
+      box-shadow:3px 3px 0 var(--grey-dark);
+    }
+    
+    .toolbar-spacer{
+      flex:1;
+      min-width:50px;
+    }
+    
+    footer{
+      margin-top:4rem;
+      padding:2rem;
+      border-top:4px solid var(--black);
+      text-align:center;
+      color:var(--grey);
+      font-size:.9rem;
+      line-height:1.8;
+      font-weight:600;
+      background:var(--white);
+      border-radius:20px;
+      box-shadow:6px 6px 0 var(--black);
+    }
+    
+    footer strong{
+      color:var(--red);
+      font-weight:900;
+    }
+    
+    @media(max-width:640px){
+      .form-grid{
+        grid-template-columns:1fr;
+      }
+      
+      .btn-group{
+        flex-direction:column;
+      }
+      
+      button{
+        width:100%;
+      }
+    }
   </style>
 </head>
 <body>
-  <div class="wrap">
+  <div class="container">
     <header>
-      <div class="brand">
-        <span class="logo" aria-hidden="true"></span>
-        <div>
-          <h1>Impostor</h1>
-          <p>Reparte identidades de futbolistas y designa impostores al azar.</p>
-        </div>
+      <div class="logo-container">
+        <img src="impostorLOGO.webp" alt="Impostor Logo">
       </div>
+      <h1>IMPOSTOR</h1>
+      <p class="subtitle">¿Quién es el impostor entre los futbolistas? Descúbrelo antes de que sea tarde</p>
     </header>
 
-    <div class="grid">
+    <div class="main-grid">
       <!-- Panel de configuración -->
-      <section class="panel" aria-labelledby="cfg-title">
-        <h2 id="cfg-title" style="margin:0 0 .5rem">Configuración</h2>
+      <aside class="panel">
+        <h2 class="panel-title">Configuración</h2>
+        
+        <div id="msg"></div>
 
-        <div id="msg" role="status" aria-live="polite"></div>
-
-        <div class="form-row">
-          <div>
-            <label for="total">Cantidad de participantes</label>
-            <input type="number" id="total" min="2" max="200" value="8" />
-          </div>
-          <div>
-            <label for="impostores">Cantidad de impostores</label>
-            <input type="number" id="impostores" min="1" max="199" value="2" />
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div style="grid-column:1/-1">
-            <label for="nombres">Nombres de los participantes (opcional, uno por línea)</label>
-            <textarea id="nombres" placeholder="Ej.
-Lucía
-Bruno
-Sofía
-Mateo"></textarea>
-            <div class="hint">Si no completas, se usarán nombres genéricos: Jugador 1, Jugador 2, ...</div>
+        <div class="form-group">
+          <div class="form-grid">
+            <div>
+              <label for="total">Participantes</label>
+              <input type="number" id="total" min="2" max="200" value="8" />
+            </div>
+            <div>
+              <label for="impostores">Impostores</label>
+              <input type="number" id="impostores" min="1" max="199" value="2" />
+            </div>
           </div>
         </div>
 
-        <div class="form-row">
-          <div style="grid-column:1/-1">
-            <label for="pool">Pool de futbolistas (se eligen al azar para los que NO son impostores)</label>
-            <input id="pool" type="text" placeholder="Usa nuestra lista por defecto o pega tus propios nombres separados por coma" />
-            <div class="hint">Ej.: Lionel Messi, Ángel Di María, Dibu Martínez, Julián Álvarez, Enzo Fernández</div>
+        <div class="form-group">
+          <label for="nombres">Nombres (uno por línea)</label>
+          <textarea id="nombres" placeholder="Lucía&#10;Bruno&#10;Sofía&#10;Mateo"></textarea>
+          <div class="hint">Dejá vacío para usar nombres genéricos</div>
+        </div>
+
+        <div class="form-group">
+          <label for="pool">Futbolistas</label>
+          <input id="pool" type="text" placeholder="Lista por defecto o separados por coma" />
+          <div class="hint">Ej: Messi, Di María, Dibu Martínez</div>
+        </div>
+
+        <div class="btn-group">
+          <button class="btn-primary" id="repartir">⚽ Repartir</button>
+          <button class="btn-danger" id="reiniciar">🔄 Reiniciar</button>
+        </div>
+
+        <div class="stats" id="stats" style="display:none">
+          <div class="stat-card">
+            <div class="stat-label">Total</div>
+            <div class="stat-value" id="tTotal">0</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Impostores</div>
+            <div class="stat-value" id="tImp">0</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Futbolistas</div>
+            <div class="stat-value" id="tJug">0</div>
           </div>
         </div>
+      </aside>
 
-        <div class="btns">
-          <button class="primary" id="repartir">Repartir</button>
-          <button class="ghost" id="revelarTodos">Revelar todos</button>
-          <button class="ghost" id="ocultarTodos">Ocultar todos</button>
-          <button class="danger" id="reiniciar">Reiniciar</button>
-        </div>
-
-        <div class="totals" id="totals" hidden>
-          <div>Total participantes: <strong id="tTotal">0</strong></div>
-          <div>Impostores: <strong id="tImp">0</strong></div>
-          <div>Futbolistas: <strong id="tJug">0</strong></div>
-        </div>
-      </section>
-
-      <!-- Panel de tarjetas / resultados -->
-      <section class="panel">
+      <!-- Panel de tarjetas -->
+      <main class="panel">
         <div class="toolbar">
-          <span class="badge">Consejo: Cada persona toca su tarjeta para ver su rol <strong>en secreto</strong>.</span>
-          <span class="sep"></span>
-          <button class="ghost" id="mezclar">Mezclar tarjetas</button>
+          <span class="toolbar-badge">💡 Tocá cada tarjeta para revelar el rol</span>
+          <span class="toolbar-spacer"></span>
+          <button class="btn-secondary" id="revelarTodos">👁️ Ver</button>
+          <button class="btn-secondary" id="ocultarTodos">🙈 Ocultar</button>
+          <button class="btn-secondary" id="mezclar">🔀 Mezclar</button>
         </div>
-        <div class="cards" id="cards" aria-live="polite"></div>
-      </section>
+        <div class="cards-grid" id="cards"></div>
+      </main>
     </div>
 
     <footer>
-      <span>⚽ Hecho para jugar en tus juntadas </span>
-      <span>•</span>
-      <span>Tip: podés pegar tu propia lista de futbolistas para adaptarlo a tu gusto.</span>
-      <span>•</span>
-      <span>Desarrollado por <strong>Ezequiel Bernardo</strong>. Si querés ayudar, podés donar al alias: <strong>ezebernardo</strong>.</span>
+      <strong>⚽ IMPOSTOR DE FÚTBOL</strong><br>
+      Hecho para tus juntadas<br>
+      Desarrollado por <strong>Ezequiel Bernardo</strong> • Doná al alias: <strong>ezebernardo</strong>
     </footer>
   </div>
 
   <script>
-    // Lista de futbolistas por defecto (variada y amplia)
     const FUTBOLISTAS_BASE = [
       "Lionel Messi","Ángel Di María","Emiliano 'Dibu' Martínez","Julián Álvarez","Rodrigo De Paul","Enzo Fernández","Lautaro Martínez","Alexis Mac Allister","Cristian Romero","Nicolás Otamendi","Nahuel Molina","Leandro Paredes","Giovani Lo Celso","Gonzalo Montiel","Nicolás Tagliafico",
       "Kylian Mbappé","Erling Haaland","Kevin De Bruyne","Mohamed Salah","Virgil van Dijk","Antoine Griezmann","Jude Bellingham","Vinícius Jr.","Harry Kane","Robert Lewandowski","Luka Modrić","Toni Kroos","Pedri","Gavi","Ter Stegen",
       "Paulo Dybala","Álvaro Morata","Federico Valverde","Darwin Núñez","Luis Suárez","Edinson Cavani","Neymar Jr.","Casemiro","Raphinha","Bruno Fernandes",
-      "Cristiano Ronaldo","Sergio Ramos","João Félix","Bernardo Silva","Bukayo Saka","Declan Rice","Heung-min Son","Hakim Ziyech","Sofyan Amrabat","Khvicha Kvaratskhelia",
-      "Emiliano Buendía","Nicolás González","Exequiel Palacios","Germán Pezzella","Lisandro Martínez","Thiago Silva","Marcelo","Álisson Becker","Thibaut Courtois",
-      "Manuel Neuer","Joshua Kimmich","Kai Havertz","Ilkay Gündogan","Phil Foden","Jack Grealish","Bernardo Silva","Riyad Mahrez","Rodri","Aurelien Tchouaméni"
+      "Cristiano Ronaldo","Sergio Ramos","João Félix","Bernardo Silva","Bukayo Saka","Declan Rice","Heung-min Son","Hakim Ziyech","Sofyan Amrabat","Khvicha Kvaratskhelia"
     ];
 
-    const el = (sel, root=document) => root.querySelector(sel);
-    const msgBox = el('#msg');
+    const $ = (sel) => document.querySelector(sel);
+    const msgBox = $('#msg');
 
     function showMsg(text, type='success'){
-      msgBox.innerHTML = `<div class="${type}">${text}</div>`;
-      if(type === 'success') setTimeout(()=> msgBox.innerHTML = '', 2500);
+      msgBox.innerHTML = `<div class="alert alert-${type}">${text}</div>`;
+      if(type === 'success') setTimeout(()=> msgBox.innerHTML = '', 3000);
     }
 
     function parsePool(){
-      const raw = el('#pool').value.trim();
+      const raw = $('#pool').value.trim();
       if(!raw) return [...FUTBOLISTAS_BASE];
       return raw.split(',').map(s=>s.trim()).filter(Boolean);
     }
 
     function getNombres(total){
-      const lines = el('#nombres').value.split(/\r?\n/).map(s=>s.trim()).filter(Boolean);
+      const lines = $('#nombres').value.split(/\r?\n/).map(s=>s.trim()).filter(Boolean);
       if(lines.length === 0){
         return Array.from({length: total}, (_,i)=> `Jugador ${i+1}`);
       }
-      // Si hay menos nombres que total, completar con genéricos
       while(lines.length < total){ lines.push(`Jugador ${lines.length+1}`); }
       return lines.slice(0,total);
     }
@@ -224,27 +702,24 @@ Mateo"></textarea>
     }
 
     function repartir(){
-      const total = Math.max(2, Math.min(200, Number(el('#total').value||0)));
-      const impostores = Math.max(1, Math.min(total-1, Number(el('#impostores').value||0)));
+      const total = Math.max(2, Math.min(200, Number($('#total').value||0)));
+      const impostores = Math.max(1, Math.min(total-1, Number($('#impostores').value||0)));
 
       if(impostores >= total){
-        showMsg('La cantidad de impostores debe ser menor al total de participantes.', 'error');
+        showMsg('⚠️ La cantidad de impostores debe ser menor al total', 'error');
         return;
       }
 
-      // Preparar nombres y elegir un ÚNICO futbolista para todos los NO impostores
       const nombres = getNombres(total);
       const pool = parsePool();
-      const elegido = pool[Math.floor(Math.random() * pool.length)] || 'Jugador sorpresa';
+      const elegido = pool[Math.floor(Math.random() * pool.length)] || 'Futbolista Misterioso';
 
-      // Crear array de roles
       const roles = Array.from({length: total}, (_,i)=> ({
         nombre: nombres[i],
         rol: 'IMPOSTOR',
-        detalle: 'Sabotea sin ser descubierto'
+        detalle: 'Saboteá sin ser descubierto'
       }));
 
-      // Marcar a los NO impostores y asignarles el MISMO futbolista
       const indices = shuffle([...Array(total).keys()]);
       const noImp = indices.slice(0, total - impostores);
       noImp.forEach((idx)=>{
@@ -254,87 +729,72 @@ Mateo"></textarea>
 
       renderTarjetas(roles);
 
-      // Totales
-      el('#tTotal').textContent = String(total);
-      el('#tImp').textContent = String(impostores);
-      el('#tJug').textContent = String(total - impostores);
-      el('#totals').hidden = false;
-      showMsg('¡Roles repartidos! Todos los que no son impostores comparten el mismo futbolista.');
+      $('#tTotal').textContent = String(total);
+      $('#tImp').textContent = String(impostores);
+      $('#tJug').textContent = String(total - impostores);
+      $('#stats').style.display = 'grid';
+      showMsg('✅ ¡Roles repartidos! Que empiece el juego');
     }
 
     function renderTarjetas(roles){
-      const cont = el('#cards');
+      const cont = $('#cards');
       cont.innerHTML = '';
       const order = shuffle([...roles]);
       order.forEach((item, i)=>{
         const isImp = item.rol === 'IMPOSTOR';
-        const flip = document.createElement('article');
-        flip.className = 'card';
-        const impOrFutClass = isImp ? 'imp' : 'fut';
-        const roleTextClass = isImp ? 'imp-text' : 'fut-text';
-        flip.innerHTML = `
-          <div class="flip" tabindex="0" role="button" aria-pressed="false" aria-label="Tocar para revelar u ocultar">
-            <div class="face front">
-              <span class="badge">#${i+1}</span>
-              <h3>${item.nombre}</h3>
-              <div class="role"><strong>Tarjeta oculta</strong></div>
-              <div class="reveal-hint">Tocar/clic para revelar (Enter o Espacio en teclado)</div>
+        const wrapper = document.createElement('div');
+        wrapper.className = 'card-wrapper';
+        wrapper.innerHTML = `
+          <div class="card" tabindex="0" role="button" aria-label="Tarjeta de ${item.nombre}">
+            <div class="card-face card-front">
+              <div class="card-number">#${i+1}</div>
+              <div class="card-name">${item.nombre}</div>
+              <div class="card-hint">👆 Tocá para revelar</div>
             </div>
-            <div class="face back ${impOrFutClass}">
-              <span class="badge">#${i+1}</span>
-              <h3>${item.nombre}</h3>
-              <div class="role"><strong>Rol:</strong> <span class="${roleTextClass}">${item.rol}</span></div>
-              <div class="role"><strong>${isImp ? 'Misión' : 'Futbolista'}:</strong> <span>${isImp ? 'Pasa desapercibido' : item.detalle}</span></div>
-              <div class="reveal-hint">Tocar de nuevo para ocultar</div>
+            <div class="card-face card-back ${isImp ? 'impostor' : 'player'}">
+              <div class="card-number">#${i+1}</div>
+              <div class="card-name">${item.nombre}</div>
+              <div class="card-role ${isImp ? 'impostor' : 'player'}">${item.rol}</div>
+              <div class="card-detail">${item.detalle}</div>
+              <div class="card-hint">👆 Tocá para ocultar</div>
             </div>
           </div>
         `;
-        const flipEl = flip.querySelector('.flip');
-        const toggle = ()=>{
-          flipEl.classList.toggle('is-revealed');
-          const pressed = flipEl.classList.contains('is-revealed');
-          flipEl.setAttribute('aria-pressed', String(pressed));
-        };
-        flipEl.addEventListener('click', toggle);
-        flipEl.addEventListener('keydown', (e)=>{
+        const card = wrapper.querySelector('.card');
+        const toggle = ()=> card.classList.toggle('flipped');
+        card.addEventListener('click', toggle);
+        card.addEventListener('keydown', (e)=>{
           if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); toggle(); }
         });
-        cont.appendChild(flip);
+        cont.appendChild(wrapper);
       });
     }
 
     function revelarTodos(){
-      document.querySelectorAll('.flip').forEach(f=>{ f.classList.add('is-revealed'); f.setAttribute('aria-pressed','true'); });
+      document.querySelectorAll('.card').forEach(c=> c.classList.add('flipped'));
     }
+    
     function ocultarTodos(){
-      document.querySelectorAll('.flip').forEach(f=>{ f.classList.remove('is-revealed'); f.setAttribute('aria-pressed','false'); });
+      document.querySelectorAll('.card').forEach(c=> c.classList.remove('flipped'));
     }
+    
     function mezclar(){
-      const cards = Array.from(document.querySelectorAll('#cards .card'));
-      const parent = el('#cards');
-      const frag = document.createDocumentFragment();
-      shuffle(cards).forEach(c=> frag.appendChild(c));
-      parent.innerHTML = '';
-      parent.appendChild(frag);
+      const cards = Array.from(document.querySelectorAll('.card-wrapper'));
+      const parent = $('#cards');
+      shuffle(cards).forEach(c=> parent.appendChild(c));
     }
+    
     function reiniciar(){
-      el('#cards').innerHTML = '';
-      el('#totals').hidden = true;
+      $('#cards').innerHTML = '';
+      $('#stats').style.display = 'none';
       msgBox.innerHTML = '';
     }
 
-    // Eventos
-    el('#repartir').addEventListener('click', repartir);
-    el('#revelarTodos').addEventListener('click', revelarTodos);
-    el('#ocultarTodos').addEventListener('click', ocultarTodos);
-    el('#mezclar').addEventListener('click', mezclar);
-    el('#reiniciar').addEventListener('click', reiniciar);
-
-    // Accesibilidad rápida: Enter en inputs numéricos dispara repartir
-    ['#total','#impostores','#pool','#nombres'].forEach(id=>{
-      el(id).addEventListener('keydown', (e)=>{ if(e.key==='Enter' && (e.ctrlKey||e.metaKey||id!=='#nombres')) repartir(); });
-    });
+    $('#repartir').addEventListener('click', repartir);
+    $('#revelarTodos').addEventListener('click', revelarTodos);
+    $('#ocultarTodos').addEventListener('click', ocultarTodos);
+    $('#mezclar').addEventListener('click', mezclar);
+    $('#reiniciar').addEventListener('click', reiniciar);
   </script>
 </body>
 </html>
-
